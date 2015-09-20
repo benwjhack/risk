@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tiles>
+	<tile code="1" default="yes"/>
+	<tile code="2" common="1"/>
+</tiles>
