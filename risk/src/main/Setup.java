@@ -9,16 +9,20 @@ import static org.lwjgl.opengl.GL11.glTranslatef;
 import game.Game;
 import game.Init;
 
+import java.awt.Font;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.Rectangle;
+import org.newdawn.slick.SlickException;
 import org.newdawn.slick.UnicodeFont;
+import org.newdawn.slick.font.effects.ColorEffect;
 import org.newdawn.slick.opengl.Texture;
 import org.newdawn.slick.opengl.TextureLoader;
 
@@ -28,18 +32,17 @@ public class Setup {
 	public static Game game;
 	public static int WIDTH = 1000;
 	public static int HEIGHT = 1000;
-	public static UnicodeFont FONT2;
-	public static UnicodeFont FONT;
+	public static UnicodeFont FONT, FONT2, FONT3, FONT4;
 	public static int RWIDTH, RHEIGHT, twidth, theight, STATE = 0;
-	public static boolean run = true;
+	public static boolean run;
 	
 	public Texture black;
 	public Texture purple;
 	public Texture[] images;
 	
-	public int chosen = -1;
+	public int chosen = -1, players = 3;
 	public static String drawText = "";
-	public String[] list = {"North America", "South America", "Europe", "Africa", "Asia", "Oceania"};
+	public String[] list = {"Yellow", "Green", "Blue", "Red", "Black"};
 	public boolean[] colours;
 	public int[][] text;
 	public String[] texts;
@@ -49,10 +52,15 @@ public class Setup {
 	
 	public int mousex, mousey, translate_x, translate_y;
 	
+	public Setup(){
+		run = true;
+	}
+	
+	@SuppressWarnings("unchecked")
 	public void init_game(int[] settings){
 		mthis = this;
-		texts2 = new String[]{"Back", "Next"};
-		text2 = new int[][]{{0, HEIGHT - Main.FONT.getHeight("Back")}, {WIDTH - FONT.getWidth("Next"),  HEIGHT - Main.FONT.getHeight("Back")}};
+		texts2 = new String[]{"Back", "Next", "Players:"};
+		text2 = new int[][]{{0, HEIGHT - Main.FONT.getHeight("Back")}, {WIDTH - FONT.getWidth("Next"),  HEIGHT - Main.FONT.getHeight("Back")}, {0, 0}};
         colours2 = new boolean[text2.length];
 		
 		theight = HEIGHT / 10;
@@ -69,38 +77,42 @@ public class Setup {
 			e1.printStackTrace();
 		}
         
-        setupStrings(new String[]{list[0], list[1], list[2], list[3], list[4], list[5]});
+        setupStrings(new String[]{list[0], list[1], list[2]});
 		
+        int size = 30;
+        
+        Font font = new Font(Main.FONT_TYPE, Font.BOLD, size);
+	    FONT3 = new UnicodeFont(font);
+	    FONT3.addAsciiGlyphs();
+	    FONT3.addGlyphs(400, 600);
+	    FONT3.getEffects().add(new ColorEffect(java.awt.Color.white));
+	    try {
+	        FONT3.loadGlyphs();
+	    } catch (SlickException e) {
+		    System.out.println("something went wrong here!");
+		    e.printStackTrace();
+		    Display.destroy();
+	    }
+	    FONT4 = new UnicodeFont(font);
+	    FONT4.addAsciiGlyphs();
+	    FONT4.addGlyphs(400, 600);
+	    FONT4.getEffects().add(new ColorEffect(java.awt.Color.blue));
+	    try {
+	        FONT4.loadGlyphs();
+	    } catch (SlickException e) {
+		    System.out.println("something went wrong here!");
+		    e.printStackTrace();
+		    Display.destroy();
+	    }
+        
 	}
 	
 	public void setupStrings(String[] newa){
 		
 		texts = newa;
-
-		int a = 5-Main.unlocked;
-		//System.out.println(a);
-		switch(a){
-		case 0:
-			texts = (new String[]{texts[0], texts[1], texts[2], texts[3], texts[4], texts[5]});
-			break;
-		case 1:
-			texts = (new String[]{texts[0] + " (Locked)", texts[1], texts[2], texts[3], texts[4], texts[5]});
-			break;
-		case 2:
-			texts = (new String[]{texts[0] + " (Locked)", texts[1] + " (Locked)", texts[2], texts[3], texts[4], texts[5]});
-			break;
-		case 3:
-			texts = (new String[]{texts[0] + " (Locked)", texts[1] + " (Locked)", texts[2] + " (Locked)", texts[3], texts[4], texts[5]});
-			break;
-		case 4:
-			texts = (new String[]{texts[0] + " (Locked)", texts[1] + " (Locked)", texts[2] + " (Locked)", texts[3] + " (Locked)", texts[4], texts[5]});
-			break;
-		case 5:
-			texts = (new String[]{texts[0] + " (Locked)", texts[1] + " (Locked)", texts[2] + " (Locked)", texts[3] + " (Locked)", texts[4] + " (Locked)", texts[5]});
-			break;
-		}
 		if(chosen == -1){
-			chosen = a;
+			chosen = 0;//5-Main.unlocked;
+			texts[0]+="-";
 		}
         text = new int[texts.length][];
         colours = new boolean[text.length];
@@ -178,7 +190,7 @@ public class Setup {
 	public void logic(){
 		
 		if(STATE == 3){
-			(new Game(0)).run();
+			(new Game(chosen, 0)).run();
 		}
 		
 		Mouse.poll();
@@ -192,14 +204,16 @@ public class Setup {
 							if(Main.unlocked < 5-i){
 								break outLoop;
 							}
-							String[] strings = list.clone();
-							strings[i] += "-";
-							setupStrings(strings);
 							chosen = i;
+							String[] temp = new String[players];
+							for(int i2=0;i2!=players;i2++){
+								temp[i2] = list[i2]+(i2==chosen?"-":"");
+							}
+							setupStrings(temp);
 						}
 					}
 					for(int i = 0; i != text2.length; i++){
-						if(mousex >= text2[i][0] && mousex <= text2[i][0] + Main.FONT.getWidth(texts2[i]) && mousey >= text2[i][1] && mousey <= text2[i][1] + Main.FONT.getHeight(texts2[i])){
+						if(mousex >= text2[i][0] && mousex <= text2[i][0] + Main.FONT.getWidth(texts2[i]+(i==2?" "+players:"")) && mousey >= text2[i][1] && mousey <= text2[i][1] + Main.FONT.getHeight(texts2[i])){
 							switch(i){
 							case 0:
 								run = false;
@@ -211,6 +225,19 @@ public class Setup {
 								//game = new Game(chosen);
 								//run = game.run();
 								break;
+							case 2:
+								players++;
+								if(players == 6){
+									players = 3;
+								}
+								if(chosen>players){
+									chosen = 0;
+								}
+								String[] temp = new String[players];
+								for(int i2=0;i2!=players;i2++){
+									temp[i2] = list[i2]+(i2==chosen?"-":"");
+								}
+								setupStrings(temp);
 							}
 						}
 					}
@@ -246,7 +273,7 @@ public class Setup {
 		
 
 		for(int i = 0; i != text2.length; i++){
-			if(mousex >= text2[i][0] && mousex <= text2[i][0] + FONT.getWidth(texts2[i]) && mousey >= text2[i][1] && mousey <= text2[i][1] + FONT.getHeight(texts2[i])){
+			if(mousex >= text2[i][0] && mousex <= text2[i][0] + FONT.getWidth(texts2[i]+(i==2?" "+players:"")) && mousey >= text2[i][1] && mousey <= text2[i][1] + FONT.getHeight(texts2[i])){
 				colours2[i] = true;
 			} else {
 				colours2[i] = false;
@@ -274,7 +301,15 @@ public class Setup {
 		
 		for(int i = 0; i != text2.length; i++){
 			if(colours2[i]){
+				if(i == 2){
+					FONT2.drawString(text2[i][0], text2[i][1], texts2[i]+" "+players);
+					continue;
+				}
 				FONT2.drawString(text2[i][0], text2[i][1], texts2[i]);
+				continue;
+			}
+			if(i==2){
+				FONT.drawString(text2[i][0], text2[i][1], texts2[i]+" "+players);
 				continue;
 			}
 			FONT.drawString(text2[i][0], text2[i][1], texts2[i]);

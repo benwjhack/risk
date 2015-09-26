@@ -10,7 +10,6 @@ import org.newdawn.slick.UnicodeFont;
 import org.newdawn.slick.font.effects.ColorEffect;
 
 import main.Draw;
-import main.IOHandle;
 import main.Setup;
 
 public class Init extends Thread{
@@ -21,7 +20,7 @@ public class Init extends Thread{
 	
 	public void init(){
 		
-		try {
+		/*try {
 			String[] args = new String[]{"cmd.exe","/C","call","scripts/run.bat"};
 			Process p = Runtime.getRuntime().exec(args);
 			StreamGobbler a = new StreamGobbler(p.getInputStream(), "input");
@@ -36,7 +35,7 @@ public class Init extends Thread{
 		}
 		
 		int[][] level = IOHandle.loadLevel("world.txt");
-		Game.level = level;
+		Game.level = level;*/
 		
 		Setup.STATE = 2;
 		Setup.drawText = "Setting up game...";

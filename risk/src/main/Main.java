@@ -85,19 +85,13 @@ public class Main {
 	    FONT.addAsciiGlyphs();
 	    FONT.addGlyphs(400, 600);
 	    FONT.getEffects().add(new ColorEffect(java.awt.Color.white));
-	    try {
-	        FONT.loadGlyphs();
-	    } catch (SlickException e) {
-		    System.out.println("something went wrong here!");
-		    e.printStackTrace();
-		    Display.destroy();
-	    }
 	    
 	    FONT2 = new UnicodeFont(font);
 	    FONT2.addAsciiGlyphs();
 	    FONT2.addGlyphs(400, 600);
 	    FONT2.getEffects().add(new ColorEffect(java.awt.Color.blue));
 	    try {
+	        FONT.loadGlyphs();
 	        FONT2.loadGlyphs();
 	    } catch (SlickException e) {
 		    System.out.println("something went wrong here!");
@@ -112,7 +106,6 @@ public class Main {
 		RHEIGHT = settings[1];
 		
 		SOUND = settings[4]==1;
-		System.out.println("s"+settings[4]);
 		
 		//WIDTH = 1280;
 		//HEIGHT = 720;
@@ -305,8 +298,10 @@ public class Main {
 								float at = sounds[0].getPosition();
 								sounds[0].stop();
 								new Setup().run(false);
-								sounds[0].playAsMusic(1.0f, 1.0f, true);
-								sounds[0].setPosition(at);
+								if(SOUND){
+									sounds[0].playAsMusic(1.0f, 1.0f, true);
+									sounds[0].setPosition(at);
+								}
 								break;
 							case 1:
 								Settings.QUALITY = WIDTH==500?1:0;

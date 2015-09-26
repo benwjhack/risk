@@ -1,0 +1,20 @@
+<continents>
+<continent name="North America" bonus="5">
+	
+<continent>
+<continent name="South America" bonus="2">
+	
+<continent>
+<continent name="Africa" bonus="3">
+	
+<continent>
+<continent name="Europe" bonus="5">
+	
+<continent>
+<continent name="Asia" bonus="7">
+	
+<continent>
+<continent name="Oceania" bonus="2">
+	
+<continent>
+</continents>

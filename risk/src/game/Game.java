@@ -1,11 +1,6 @@
 package game;
 
-import static org.lwjgl.input.Keyboard.KEY_DOWN;
-import static org.lwjgl.input.Keyboard.KEY_LEFT;
-import static org.lwjgl.input.Keyboard.KEY_RIGHT;
-import static org.lwjgl.input.Keyboard.KEY_SPACE;
-import static org.lwjgl.input.Keyboard.KEY_UP;
-import static org.lwjgl.input.Keyboard.isKeyDown;
+import static org.lwjgl.input.Keyboard.*;
 import static org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
 import static org.lwjgl.opengl.GL11.glClear;
 import static org.lwjgl.opengl.GL11.glPopMatrix;
@@ -28,7 +23,7 @@ public class Game {
 	public static int WIDTH, HEIGHT, RWIDTH, RHEIGHT, iHEIGHT, iWIDTH, player;
 	public static int twidth, theight;
 	public static UnicodeFont FONT, FONT2;
-	public static boolean run = true;
+	public static boolean run;
 	public static int[][] level;
 	public static UnicodeFont[] FONTS;
 	
@@ -36,8 +31,9 @@ public class Game {
 	
 	public int mousex, mousey, translate_x = 0, translate_y = 0;
 	
-	public Game(int country){
+	public Game(int country, int number){
 		player = country;
+		run = true;
 	}
 	
 	public void init(){
@@ -72,6 +68,9 @@ public class Game {
 				run = false;
 				Setup.run = false;
 				Main.run = false;
+			}
+			if(isKeyDown(KEY_ESCAPE)){
+				run = false;
 			}
 			
 			logic();
@@ -135,6 +134,15 @@ public class Game {
 		}
 		if(isKeyDown(KEY_SPACE)){
 			translate_x = 0; translate_y = 0;
+		}
+		if(isKeyDown(KEY_Q)){
+			iWIDTH*=1.01;
+			iHEIGHT*=1.01;
+		} else if(isKeyDown(KEY_A)){
+			if(!(iWIDTH/1.01<WIDTH/1.2 || iHEIGHT/1.01<HEIGHT)){
+				iWIDTH/=1.01;
+				iHEIGHT/=1.01;
+			}
 		}
 		if(translate_x < -iWIDTH*0.1){
 			translate_x = (int) (-iWIDTH*0.1);
