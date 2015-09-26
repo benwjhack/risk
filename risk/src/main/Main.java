@@ -65,7 +65,7 @@ public class Main {
 	public static int RWIDTH, RHEIGHT, twidth, theight, unlocked;
 	public static UnicodeFont FONT, FONT2;
 	public static boolean run = true, SOUND = true;
-	public static int WIDTH, HEIGHT;
+	public final static int WIDTH = 1280, HEIGHT = 720;
 	public static Main mthis;
 
 	public Audio[] sounds;
@@ -114,8 +114,8 @@ public class Main {
 		SOUND = settings[4]==1;
 		System.out.println("s"+settings[4]);
 		
-		WIDTH = 1280;
-		HEIGHT = 720;
+		//WIDTH = 1280;
+		//HEIGHT = 720;
 		
 		DisplayMode displayMode = null;
         DisplayMode[] modes = null;
@@ -147,6 +147,8 @@ public class Main {
 		try {
 			Display.setInitialBackground(255, 255, 255);
 			Display.setDisplayMode(settings[2]==0?backupDisplayMode:displayMode);
+			RWIDTH = (settings[2]==0?backupDisplayMode:displayMode).getWidth();
+			RHEIGHT = (settings[2]==0?backupDisplayMode:displayMode).getHeight();
 			Display.setResizable(true);
 			Display.setLocation(0, 0);
 			Display.setFullscreen(settings[2] == 0);
@@ -369,7 +371,6 @@ public class Main {
 	
 	public void end(){
 		
-		System.out.println("e"+(SOUND?1:0));
 		IOHandle.writeSettings(new int[]{RWIDTH, RHEIGHT, Display.isFullscreen()?0:1, unlocked, Main.SOUND?1:0});
 		Display.destroy();
 		AL.destroy();

@@ -18,6 +18,7 @@ import main.Setup;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.util.Rectangle;
 import org.newdawn.slick.UnicodeFont;
 import org.newdawn.slick.opengl.Texture;
 
@@ -40,6 +41,9 @@ public class Game {
 	}
 	
 	public void init(){
+		
+		images = Setup.mthis.images;
+		
 		FONT = Main.FONT;
 		FONT2 = Main.FONT2;
 		
@@ -48,6 +52,9 @@ public class Game {
 		
 		RWIDTH = Main.RWIDTH;
 		RHEIGHT = Main.RHEIGHT;
+		
+		iWIDTH = WIDTH * 2;
+		iHEIGHT = HEIGHT * 2;
 		
 	}
 	
@@ -100,6 +107,10 @@ public class Game {
             GL11.glViewport(0, 0, RWIDTH, RHEIGHT);
             GL11.glLoadIdentity();
 		}
+
+		Draw.renderthistex(new Rectangle(-iWIDTH,0,iWIDTH,iHEIGHT), images[0]);
+		Draw.renderthistex(new Rectangle(0,0,iWIDTH,iHEIGHT), images[0]);
+		Draw.renderthistex(new Rectangle(iWIDTH,0,iWIDTH,iHEIGHT), images[0]);
 		
 		Init.drawTop();
 		Draw.drawSquare(0, 0, 100, 100);
@@ -125,17 +136,16 @@ public class Game {
 		if(isKeyDown(KEY_SPACE)){
 			translate_x = 0; translate_y = 0;
 		}
-		/*if(translate_x < 0){
-			translate_x = 0;
-		} else if(translate_x + WIDTH > iWIDTH){
-			translate_x = iWIDTH - WIDTH;
+		if(translate_x < -iWIDTH*0.1){
+			translate_x = (int) (-iWIDTH*0.1);
+		} else if(translate_x + WIDTH > iWIDTH *1.1){
+			translate_x = (int) (iWIDTH*1.1 - WIDTH);
 		}
 		if(translate_y < 0){
 			translate_y = 0;
 		} else if(translate_y + HEIGHT > iHEIGHT){
 			translate_y = iHEIGHT - HEIGHT;
-		}*/
-		
+		}
 	}
 	
 }

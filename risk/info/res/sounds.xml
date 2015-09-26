@@ -1,8 +1,5 @@
-<?xml version="1.0"?>
-<sounds wha="wha?">
+<sounds>
 <sound default="yes" loc="res/01.wav">
 hi
-</sound>
-<sound>
 </sound>
 </sounds>

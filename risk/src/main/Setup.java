@@ -1,19 +1,8 @@
 package main;
 
 import static org.lwjgl.input.Keyboard.*;
-import static org.lwjgl.opengl.GL11.GL_BLEND;
 import static org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
-import static org.lwjgl.opengl.GL11.GL_MODELVIEW;
-import static org.lwjgl.opengl.GL11.GL_ONE_MINUS_SRC_ALPHA;
-import static org.lwjgl.opengl.GL11.GL_PROJECTION;
-import static org.lwjgl.opengl.GL11.GL_SRC_ALPHA;
-import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
-import static org.lwjgl.opengl.GL11.glBlendFunc;
 import static org.lwjgl.opengl.GL11.glClear;
-import static org.lwjgl.opengl.GL11.glEnable;
-import static org.lwjgl.opengl.GL11.glLoadIdentity;
-import static org.lwjgl.opengl.GL11.glMatrixMode;
-import static org.lwjgl.opengl.GL11.glOrtho;
 import static org.lwjgl.opengl.GL11.glPopMatrix;
 import static org.lwjgl.opengl.GL11.glPushMatrix;
 import static org.lwjgl.opengl.GL11.glTranslatef;
@@ -24,28 +13,18 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
-import java.awt.Font;
-
-import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
-import org.lwjgl.openal.AL;
 import org.lwjgl.opengl.Display;
-import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.Rectangle;
-import org.newdawn.slick.Color;
-import org.newdawn.slick.SlickException;
 import org.newdawn.slick.UnicodeFont;
-import org.newdawn.slick.font.effects.ColorEffect;
-import org.newdawn.slick.openal.SoundStore;
 import org.newdawn.slick.opengl.Texture;
 import org.newdawn.slick.opengl.TextureLoader;
 
-@SuppressWarnings("unused")
 public class Setup {
 	
+	public static Setup mthis;
 	public static Game game;
 	public static int WIDTH = 1000;
 	public static int HEIGHT = 1000;
@@ -71,17 +50,19 @@ public class Setup {
 	public int mousex, mousey, translate_x, translate_y;
 	
 	public void init_game(int[] settings){
+		mthis = this;
 		texts2 = new String[]{"Back", "Next"};
 		text2 = new int[][]{{0, HEIGHT - Main.FONT.getHeight("Back")}, {WIDTH - FONT.getWidth("Next"),  HEIGHT - Main.FONT.getHeight("Back")}};
         colours2 = new boolean[text2.length];
 		
 		theight = HEIGHT / 10;
 		twidth = theight;
-		//images = new Texture[15];
+		images = new Texture[1];
 		
 		try {
 			black = TextureLoader.getTexture("PNG", new FileInputStream(new File("res/black.png")));
 			purple = TextureLoader.getTexture("PNG", new FileInputStream(new File("res/purple.png")));
+			images[0] = TextureLoader.getTexture("PNG", new FileInputStream(new File("res/map.png")));
 		} catch (FileNotFoundException e1) {
 			e1.printStackTrace();
 		} catch (IOException e1) {
