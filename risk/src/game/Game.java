@@ -1,6 +1,7 @@
 package game;
 
 import static org.lwjgl.input.Keyboard.*;
+import static org.lwjgl.input.Mouse.*;
 import static org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
 import static org.lwjgl.opengl.GL11.glClear;
 import static org.lwjgl.opengl.GL11.glPopMatrix;
@@ -9,29 +10,34 @@ import static org.lwjgl.opengl.GL11.glTranslatef;
 import main.Draw;
 import main.Main;
 import main.Setup;
+import main.Settings;
 
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.Rectangle;
+import org.newdawn.slick.Color;
 import org.newdawn.slick.UnicodeFont;
 import org.newdawn.slick.opengl.Texture;
 
 public class Game {
 
+	public static int[] settings;
 	public static Game mthis;
 	public static int WIDTH, HEIGHT, RWIDTH, RHEIGHT, iHEIGHT, iWIDTH, player;
 	public static int twidth, theight;
 	public static UnicodeFont FONT, FONT2;
 	public static boolean run;
-	public static int[][] level;
 	public static UnicodeFont[] FONTS;
 	
 	public Texture[] images;
 	
+	public Button[] buttons;
+	public Continent[] continents;
 	public int mousex, mousey, translate_x = 0, translate_y = 0;
 	
 	public Game(int country, int number){
+		mthis = this;
 		player = country;
 		run = true;
 	}
@@ -90,16 +96,21 @@ public class Game {
 	// Top level logic
 	public void logic(){
 		
+		for(Button button: buttons){
+			if(isButtonDown(0)){
+				if(mousex > button.x && mousex < button.x + button.width && mousey > button.y && mousey < button.y + button.height){
+					(new Settings()).run(false);
+				}
+			}
+		}
+		
 	}
 	
 	public void draw(){
 		
 		glClear(GL_COLOR_BUFFER_BIT);
-		
 		glPushMatrix();
-		
 		glTranslatef(-translate_x, -translate_y, 0);
-		
 		if (Display.wasResized()) {
             RWIDTH = Display.getWidth();
             RHEIGHT = Display.getHeight();
@@ -111,8 +122,17 @@ public class Game {
 		Draw.renderthistex(new Rectangle(0,0,iWIDTH,iHEIGHT), images[0]);
 		Draw.renderthistex(new Rectangle(iWIDTH,0,iWIDTH,iHEIGHT), images[0]);
 		
+		for(Continent cont: continents){
+			for(Country country: cont.countries){
+				FONTS[2].drawString(country.pos[0] * iWIDTH, country.pos[1] * iHEIGHT, country.name, new Color(100, 100, 100));
+			}
+		}
+		
 		Init.drawTop();
-		Draw.drawSquare(0, 0, 100, 100);
+		
+		for(Button button: buttons){
+			button.render();
+		}
 		
 		glPopMatrix();
 		Display.update();
@@ -121,6 +141,22 @@ public class Game {
 	
 	// Back end logic
 	public void update(){
+		
+		// MOUSE
+		
+		Mouse.poll();
+		while(Mouse.next()){
+			if(Mouse.getEventButtonState()){
+				int eventKey = Mouse.getEventButton();
+				switch(eventKey){
+				case 0:
+					break;
+				}
+			}
+		}
+		
+		// MOUSE
+		// SCREEN
 		
 		if(isKeyDown(KEY_LEFT) || mousex - translate_x < WIDTH / 10 && mousey - translate_y > 100){
 			translate_x -= 3;
@@ -154,6 +190,17 @@ public class Game {
 		} else if(translate_y + HEIGHT > iHEIGHT){
 			translate_y = iHEIGHT - HEIGHT;
 		}
+		
+		// SCREEN
+		
+		// BUTTON
+		
+		for(Button button: buttons){
+			button.update();
+		}
+		
+		// BUTTON
+		
 	}
 	
 }

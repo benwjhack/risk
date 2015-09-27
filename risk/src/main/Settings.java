@@ -239,6 +239,9 @@ public class Settings {
 		Main.RWIDTH = RWIDTH;
 		Main.RHEIGHT = RHEIGHT;
 		
+		Game.RWIDTH = RWIDTH;
+		Game.RHEIGHT = RHEIGHT;
+		
 	}
 	
 	public void logic(){

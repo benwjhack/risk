@@ -39,6 +39,17 @@ public class Button {
 		this.text = text;
 	}
 	
+	public Button(int x, int y, String text, int type, boolean bool){
+		this.x = x;
+		this.y = y;
+		ox = this.x;
+		oy = this.y;
+		width = Game.FONTS[0].getWidth(text);
+		height = Game.FONTS[0].getHeight(text);
+		this.text = text;
+		this.type = type;
+	}
+	
 	public void update(){
 		x = ox + Game.mthis.translate_x;
 		y = oy + Game.mthis.translate_y;
@@ -58,19 +69,7 @@ public class Button {
 		}
 		if(hover){
 			one++;
-		}/*
-		if(id == 1){
-			Game.FONTS[one].drawString(x, y, (Game.autos[0]==1?"On":"Off"));
-			return;
 		}
-		if(id == 2){
-			Game.FONTS[one].drawString(x, y, "" + Game.autos[1]);
-			return;
-		}
-		if(id == 3){
-			Game.FONTS[one].drawString(x, y, "" + (Game.autos[2]==11?"All":Game.autos[2]));
-			return;
-		}*/
 		Game.FONTS[one].drawString(x, y, text);
 	}
 

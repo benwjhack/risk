@@ -1,5 +1,7 @@
 package game;
 
+import static org.lwjgl.opengl.GL11.glColor4f;
+
 import java.awt.Font;
 import java.io.*;
 
@@ -8,8 +10,12 @@ import org.lwjgl.util.Rectangle;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.UnicodeFont;
 import org.newdawn.slick.font.effects.ColorEffect;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 import main.Draw;
+import main.IOHandle;
 import main.Setup;
 
 public class Init extends Thread{
@@ -60,7 +66,6 @@ public class Init extends Thread{
 		    Display.destroy();
 	    }
 	    Game.FONTS[2] = FONT;
-	    
 	    FONT = new UnicodeFont(font);
 	    FONT.addAsciiGlyphs();
 	    FONT.addGlyphs(400, 600);
@@ -72,14 +77,51 @@ public class Init extends Thread{
 		    Display.destroy();
 	    }
 	    Game.FONTS[3] = FONT;
-		
+	    
+	    Continent[] continents = new Continent[6];
+	    Document doc = IOHandle.readXML("info/continents/continents.xml");
+		NodeList nodes = doc.getDocumentElement().getChildNodes();
+	    for(int i = 0; i != nodes.getLength(); i++){
+	    	Node node = nodes.item(i);
+	    	Country[] countries = new Country[node.getChildNodes().getLength()];
+			for(int i2 = 0; i2 != node.getChildNodes().getLength(); i2++){
+				Node cnode = node.getChildNodes().item(i2);
+				String[] pos = cnode.getAttributes().getNamedItem("pos").getTextContent().split(" ");
+				Country country = new Country(cnode.getAttributes().getNamedItem("name").getTextContent(), Float.parseFloat(pos[0]), Float.parseFloat(pos[1]));
+				countries[i2] = country;
+			}
+			Continent continent = new Continent(node.getAttributes().getNamedItem("name").getTextContent(), Integer.parseInt(node.getAttributes().getNamedItem("bonus").getTextContent()), countries);
+			continents[i] = continent;
+		}
+	    
+	    Game.mthis.continents = continents;
+	    
+	    int sb = 1;
+	    Game.mthis.buttons = new Button[sb];
+		Game.mthis.buttons[0] = new Button(Setup.WIDTH-Game.FONTS[2].getWidth("Menu"), 0, "Menu", 1, true);
+	    
 		Setup.STATE = 3;
 		Setup.drawText = "Done!";
 	}
 	
 	public static void drawTop(){
 		
-		Draw.renderthiso(new Rectangle(Game.mthis.translate_x,Game.mthis.translate_y,Game.WIDTH,100), 0, 0, 0);
+		Draw.renderthiso(new Rectangle(Game.mthis.translate_x,Game.mthis.translate_y,Game.WIDTH,100), 1f, 1f, 1f, 0.5f);
+		Draw.drawSquare(Game.mthis.translate_x, Game.mthis.translate_y, Game.WIDTH, 100);
+		glColor4f(1f,1f,1f, 1f);
+		
+		/*Rectangle object = new Rectangle(Game.mthis.translate_x, Game.mthis.translate_y, Game.WIDTH, 100);
+		
+		glDisable(GL_TEXTURE_2D);
+
+		glBegin(GL_QUADS);
+		glVertex2i(object.getX(), object.getY()); 
+		glVertex2i(object.getX() + object.getWidth(), object.getY()); 
+		glVertex2i(object.getX() + object.getWidth(), object.getY() + object.getHeight()); 
+		glVertex2i(object.getX(), object.getY() + object.getHeight()); 
+		glEnd();
+		
+		glEnable(GL_TEXTURE_2D);*/
 		
 	}
 	

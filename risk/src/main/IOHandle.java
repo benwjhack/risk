@@ -18,6 +18,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.w3c.dom.Document;
+import org.w3c.dom.Node;
 import org.w3c.dom.Text;
 import org.xml.sax.SAXException;
 
@@ -131,15 +132,34 @@ public class IOHandle {
 			ioe.printStackTrace();
 		}
 		dom.normalize();
-		int oh = dom.getDocumentElement().getChildNodes().getLength();
 		
-		for(int i = 0; i != oh; i++){
+		explore(dom.getDocumentElement());
+		
+		//int oh = dom.getDocumentElement().getChildNodes().getLength();
+		
+		/*for(int i = 0; i != oh; i++){
 			if(dom.getDocumentElement().getChildNodes().item(i) instanceof Text){
 				dom.getDocumentElement().removeChild(dom.getDocumentElement().getChildNodes().item(i));
 				oh--;i--;
 			}
-		}
+		}*/
 		return dom;
+    }
+    
+    public static void explore(Node node){
+    	int oh = node.getChildNodes().getLength();
+    	for(int i = 0; i != oh; i++){
+    		if(node.getChildNodes().item(i) instanceof Text){
+    			node.removeChild(node.getChildNodes().item(i));
+    			i--;oh--;
+    			//System.out.println("Removing "+node.getNodeName());
+    			continue;
+    		}
+    		//System.out.println("Leaving "+node.getChildNodes().item(i).getNodeName());
+    		if(node.getChildNodes().item(i).hasChildNodes()){
+    			explore(node.getChildNodes().item(i));
+    		}
+    	}
     }
     
     /*public static Country[] getMCSettings(){

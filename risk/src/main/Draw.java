@@ -137,6 +137,7 @@ public class Draw {
 	}
 	
 	public static void renderthiso(Rectangle object, float a, float b, float c, float d){
+		glDisable(GL_TEXTURE_2D);
 		glColor4f(a,b,c, d);
 
 		glBegin(GL_QUADS);
@@ -145,6 +146,7 @@ public class Draw {
 		glVertex2i(object.getX() + object.getWidth(), object.getY() + object.getHeight()); 
 		glVertex2i(object.getX(), object.getY() + object.getHeight()); 
 		glEnd();
+		glEnable(GL_TEXTURE_2D);
 	}
 	
 	public static void renderthistext(Rectangle object, Texture texture, int a, int b, int c, int d){

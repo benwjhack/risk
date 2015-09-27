@@ -190,7 +190,7 @@ public class Setup {
 	public void logic(){
 		
 		if(STATE == 3){
-			(new Game(chosen, 0)).run();
+			game.run();
 		}
 		
 		Mouse.poll();
@@ -219,6 +219,7 @@ public class Setup {
 								run = false;
 								break;
 							case 1:
+								game = new Game(chosen, 0);
 								STATE = 1;
 								drawText = "Generating level...";
 								(new Init()).start();
