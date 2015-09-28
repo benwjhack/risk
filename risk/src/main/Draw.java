@@ -98,6 +98,8 @@ public class Draw {
 		GL11.glDisable(GL_TEXTURE_2D);
 		GL11.glColor3f(q, w, e);
 		
+		GL11.glLineWidth(1f);
+		
 		GL11.glBegin(GL11.GL_LINE_STRIP);
 		    GL11.glVertex2f(a,b);
 		    GL11.glVertex2f(a+width,b);
@@ -176,12 +178,51 @@ public class Draw {
 
 	}
 	
+	public static void renderthistexS(Rectangle object, Texture texture, float a, float b, float c, float e){
+		glColor4f(a,b,c,e);
+		a = 0;
+		b = 0;
+		c = 1;
+		int d = 1;
+		GL11.glBindTexture(GL11.GL_TEXTURE_2D, texture.getTextureID());
+		glBegin(GL_TRIANGLES);
+	 
+			glTexCoord2f(c, b);
+			glVertex2i(object.getX() + object.getWidth(), object.getY());
+			glTexCoord2f(a, b);
+			glVertex2i(object.getX(), object.getY());
+			glTexCoord2f(a, d);
+			glVertex2i(object.getX(), object.getY() + object.getHeight());
+			
+			glTexCoord2f(a, d);
+			glVertex2i(object.getX(), object.getHeight() + object.getY());
+			glTexCoord2f(c, d);
+			glVertex2i(object.getX() + object.getWidth(), object.getY() + object.getHeight());
+			glTexCoord2f(c, b);
+			glVertex2i(object.getX() + object.getWidth(), object.getY());
+	 
+		glEnd();
+
+	}
+	
 	public static void renderthistex(Rectangle object, Texture texture){
 		renderthistex(object,texture,0,0,1,1,1);
 	}
 	
 	public static void renderthistex(Rectangle object, Texture texture, float d){
 		renderthistex(object,texture,0,0,1,1,d);
+	}
+	
+	public static void drawLine(int x, int y, int x1, int y1, float[] colours) {
+		if(colours.length == 3){
+			GL11.glColor4f(colours[0], colours[1], colours[2], 1f);
+		} else {
+			GL11.glColor4f(colours[0], colours[1], colours[2], colours[3]);
+		}
+	    GL11.glBegin(GL11.GL_LINES);
+	    	GL11.glVertex2d(x, y);
+	    	GL11.glVertex2d(x1, y1);
+	    GL11.glEnd();
 	}
 	
 }

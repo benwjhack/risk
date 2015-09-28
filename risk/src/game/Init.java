@@ -1,15 +1,16 @@
 package game;
 
-import static org.lwjgl.opengl.GL11.glColor4f;
-
 import java.awt.Font;
 import java.io.*;
+import java.util.ArrayList;
 
 import org.lwjgl.opengl.Display;
 import org.lwjgl.util.Rectangle;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.UnicodeFont;
 import org.newdawn.slick.font.effects.ColorEffect;
+import org.newdawn.slick.opengl.Texture;
+import org.newdawn.slick.opengl.TextureLoader;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -50,6 +51,32 @@ public class Init extends Thread{
 	
 	@SuppressWarnings("unchecked")
 	public static void init2(){
+		
+		Country.players = Setup.players;
+		Country.names = new String[Country.players];
+		for(int i = 0; i != Country.players; i++){
+			Country.names[i] = Setup.mthis.list[i];
+		}
+		float[][] colours = new float[][]{{1f, 1f, 0f}, {0f, 1f, 0f}, {0f, 0f, 1f}, {1f, 0f, 0f}, {1f, 1f, 1f}};
+		Country.colours = new float[Country.players][];
+		for(int i = 0; i != Country.players; i++){
+			Country.colours[i] = colours[i];
+		}
+		
+		Texture[] images = new Texture[3];
+		
+		try {
+			images[0] = TextureLoader.getTexture("PNG", new FileInputStream(new File("res/map.png")));
+			images[1] = TextureLoader.getTexture("PNG", new FileInputStream(new File("res/city.png")));
+			images[2] = TextureLoader.getTexture("PNG", new FileInputStream(new File("res/capital.png")));
+		} catch (FileNotFoundException e1) {
+			e1.printStackTrace();
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+		
+		Game.mthis.images = images;
+		
 		Game.FONTS = new UnicodeFont[4];
 		Game.FONTS[0] = Setup.FONT;
 		Game.FONTS[1] = Setup.FONT2;
@@ -78,6 +105,12 @@ public class Init extends Thread{
 	    }
 	    Game.FONTS[3] = FONT;
 	    
+	    Game.mthis.players = new Player[Country.players];
+	    for(int i = 0; i != Country.players; i++){
+	    	Game.mthis.players[i] = new Player(i);
+	    }
+	    Game.mthis.players[Game.player].player = true;
+	    
 	    Continent[] continents = new Continent[6];
 	    Document doc = IOHandle.readXML("info/continents/continents.xml");
 		NodeList nodes = doc.getDocumentElement().getChildNodes();
@@ -94,11 +127,56 @@ public class Init extends Thread{
 			continents[i] = continent;
 		}
 	    
+	    doc = IOHandle.readXML("info/continents/connections.xml");
+		nodes = doc.getDocumentElement().getChildNodes();
+		ArrayList<Integer>[] nexts = new ArrayList[Continent.overall.size()];
+		for(int i = 0; i != nexts.length; i++){
+			nexts[i] = new ArrayList<Integer>();
+		}
+	    for(int i = 0; i != nodes.getLength(); i++){
+	    	Node node = nodes.item(i);
+	    	int one = Integer.parseInt(node.getAttributes().getNamedItem("one").getTextContent()) - 1;
+	    	int two = Integer.parseInt(node.getAttributes().getNamedItem("two").getTextContent()) - 1;
+    		//System.out.println("Connecting "+one+" and "+two);
+	    	nexts[one].add(two);
+	    	nexts[two].add(one);
+		}
+	    
+	    for(int i = 0; i != nexts.length; i++){
+	    	ArrayList<Integer> array = nexts[i];
+    		Continent.overall.get(i).nextTo = new int[array.size()];
+	    	for(int i2 = 0; i2 != array.size(); i2++){
+	    		//System.out.println("Connecting "+i+" and "+array.get(i2));
+	    		Continent.overall.get(i).nextTo[i2] = array.get(i2);
+	    	}
+	    }
+	    
+	    doc = IOHandle.readXML("info/continents/setup.xml");
+		nodes = doc.getDocumentElement().getChildNodes().item(Setup.players-3).getChildNodes();
+	    for(int i = 0; i != nodes.getLength(); i++){
+	    	NodeList nodes2 = nodes.item(i).getChildNodes();
+	    	for(int i2 = 0; i2 != nodes2.getLength(); i2++){
+	    		Node node = nodes2.item(i2);
+	    		int id = Integer.parseInt(node.getAttributes().getNamedItem("id").getTextContent())-1;
+	    		int num = Integer.parseInt(node.getAttributes().getNamedItem("num").getTextContent());
+	    		boolean city = node.getAttributes().getNamedItem("city")!=null;
+	    		boolean capital = node.getAttributes().getNamedItem("capital")!=null;
+	    		Continent.overall.get(id).army = num;
+	    		Continent.overall.get(id).city = city;
+	    		Continent.overall.get(id).owner = i;
+	    		Continent.overall.get(id).origOwner = i;
+	    		Continent.overall.get(id).capital = capital;
+	    		Continent.overall.get(id).done = true;
+	    		Game.mthis.players[i].countries.add(Continent.overall.get(id));
+	    	}
+		}
+	    
 	    Game.mthis.continents = continents;
 	    
-	    int sb = 1;
+	    int sb = 2;
 	    Game.mthis.buttons = new Button[sb];
 		Game.mthis.buttons[0] = new Button(Setup.WIDTH-Game.FONTS[2].getWidth("Menu"), 0, "Menu", 1, true);
+		Game.mthis.buttons[1] = new Button(Setup.WIDTH-Game.FONTS[2].getWidth("End Go"), (int)(Game.FONTS[2].getHeight("I")*2), "End Go", 1, true);
 	    
 		Setup.STATE = 3;
 		Setup.drawText = "Done!";
@@ -108,20 +186,16 @@ public class Init extends Thread{
 		
 		Draw.renderthiso(new Rectangle(Game.mthis.translate_x,Game.mthis.translate_y,Game.WIDTH,100), 1f, 1f, 1f, 0.5f);
 		Draw.drawSquare(Game.mthis.translate_x, Game.mthis.translate_y, Game.WIDTH, 100);
-		glColor4f(1f,1f,1f, 1f);
 		
-		/*Rectangle object = new Rectangle(Game.mthis.translate_x, Game.mthis.translate_y, Game.WIDTH, 100);
-		
-		glDisable(GL_TEXTURE_2D);
-
-		glBegin(GL_QUADS);
-		glVertex2i(object.getX(), object.getY()); 
-		glVertex2i(object.getX() + object.getWidth(), object.getY()); 
-		glVertex2i(object.getX() + object.getWidth(), object.getY() + object.getHeight()); 
-		glVertex2i(object.getX(), object.getY() + object.getHeight()); 
-		glEnd();
-		
-		glEnable(GL_TEXTURE_2D);*/
+		int height = 0;
+		String string = "Go : "+Country.names[Game.go];
+		Game.FONTS[2].drawString(Game.mthis.translate_x, Game.mthis.translate_y + height, string);
+		height += Game.FONTS[2].getHeight(string);
+		string = "Attack dice : "+Game.settings[1];
+		Game.FONTS[2].drawString(Game.mthis.translate_x, Game.mthis.translate_y + height, string);
+		height += Game.FONTS[2].getHeight(string);
+		string = "Defend dice : "+Game.settings[2];
+		Game.FONTS[2].drawString(Game.mthis.translate_x, Game.mthis.translate_y + height, string);
 		
 	}
 	

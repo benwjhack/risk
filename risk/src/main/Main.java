@@ -199,8 +199,7 @@ public class Main {
 		
 		unlocked = settings[3];
 		
-		Game.settings = new int[1];
-		Game.settings[0] = 0;
+		Game.settings = new int[]{0, 2, 1};
 		
 	}
 	

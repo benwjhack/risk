@@ -2,6 +2,8 @@ package game;
 
 public class Button {
 	
+	public static int idCounter = 0;
+	
 	public int id;
 	
 	public String text;
@@ -9,43 +11,47 @@ public class Button {
 	public boolean hover = false;
 	
 	public Button(int x, int y, String text){
+		this.id = idCounter++;
 		this.x = x - Game.FONTS[0].getWidth(text) / 2;
 		this.y = y - Game.FONTS[0].getHeight(text) / 2;
 		ox = this.x;
 		oy = this.y;
-		width = Game.FONTS[0].getWidth(text);
-		height = Game.FONTS[0].getHeight(text);
+		width = Game.FONTS[2].getWidth(text);
+		height = Game.FONTS[2].getHeight(text);
 		this.text = text;
 	}
 	
 	public Button(int x, int y, int type, String text){
+		this.id = idCounter++;
 		this.x = x - Game.FONTS[type].getWidth(text) / 2;
 		this.y = y - Game.FONTS[type].getHeight(text) / 2;
 		ox = this.x;
 		oy = this.y;
-		width = Game.FONTS[0].getWidth(text);
-		height = Game.FONTS[0].getHeight(text);
+		width = Game.FONTS[2].getWidth(text);
+		height = Game.FONTS[2].getHeight(text);
 		this.type = type;
 		this.text = text;
 	}
 	
 	public Button(int x, int y, String text, boolean bool){
+		this.id = idCounter++;
 		this.x = x;
 		this.y = y;
 		ox = this.x;
 		oy = this.y;
-		width = Game.FONTS[0].getWidth(text);
-		height = Game.FONTS[0].getHeight(text);
+		width = Game.FONTS[2].getWidth(text);
+		height = Game.FONTS[2].getHeight(text);
 		this.text = text;
 	}
 	
 	public Button(int x, int y, String text, int type, boolean bool){
+		this.id = idCounter++;
 		this.x = x;
 		this.y = y;
 		ox = this.x;
 		oy = this.y;
-		width = Game.FONTS[0].getWidth(text);
-		height = Game.FONTS[0].getHeight(text);
+		width = Game.FONTS[2].getWidth(text);
+		height = Game.FONTS[2].getHeight(text);
 		this.text = text;
 		this.type = type;
 	}

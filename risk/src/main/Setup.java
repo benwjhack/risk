@@ -40,7 +40,7 @@ public class Setup {
 	public Texture purple;
 	public Texture[] images;
 	
-	public int chosen = -1, players = 3;
+	public static int chosen = -1, players = 3;
 	public static String drawText = "";
 	public String[] list = {"Yellow", "Green", "Blue", "Red", "Black"};
 	public boolean[] colours;
@@ -174,6 +174,7 @@ public class Setup {
 			if(Display.isCloseRequested()){
 				run = false;
 				Main.run = false;
+				Game.run = false;
 				//Main.mthis.end();
 			}
 

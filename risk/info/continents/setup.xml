@@ -1,0 +1,158 @@
+<setup>
+<option players="3">
+	<colour> Yellow
+		<country id="1" num="1"/>
+		<country id="7" num="1" city=""/>
+		<country id="8" num="1" city=""/>
+		<country id="9" num="1"/>
+		<country id="10" num="1"/>
+		<country id="21" num="2"/>
+		<country id="22" num="2" city=""/>
+		<country id="16" num="2"/>
+		<country id="18" num="1"/>
+		<country id="29" num="2"/>
+		<country id="34" num="3" city=""/>
+		<country id="36" num="3" city=""/>
+		<country id="37" num="4"/>
+		<country id="40" num="4" capital=""/>
+		<country id="41" num="2"/>
+	</colour>
+	<colour> Green
+		<country id="4" num="2"/>
+		<country id="5" num="1" city=""/>
+		<country id="11" num="2"/>
+		<country id="12" num="4" city=""/>
+		<country id="13" num="3" capital=""/>
+		<country id="23" num="2" city=""/>
+		<country id="14" num="2"/>
+		<country id="15" num="1" city=""/>
+		<country id="27" num="1"/>
+		<country id="28" num="1"/>
+		<country id="31" num="2"/>
+		<country id="32" num="2"/>
+		<country id="38" num="4" city=""/>
+		<country id="39" num="3"/>
+	</colour>
+	<colour> Blue
+		<country id="2" num="2"/>
+		<country id="3" num="4" capital=""/>
+		<country id="6" num="2"/>
+		<country id="17" num="4"/>
+		<country id="19" num="4" city=""/>
+		<country id="20" num="1"/>
+		<country id="24" num="3" city=""/>
+		<country id="25" num="3" city=""/>
+		<country id="26" num="3" city=""/>
+		<country id="30" num="1"/>
+		<country id="33" num="1"/>
+		<country id="35" num="1"/>
+		<country id="42" num="1" city=""/>
+	</colour>
+</option>
+<option players="4">
+	<colour> Yellow
+		<country id="1" num="1"/>
+		<country id="9" num="2"/>
+		<country id="24" num="3" city=""/>
+		<country id="26" num="3" city=""/>
+		<country id="25" num="3" city=""/>
+		<country id="16" num="3"/>
+		<country id="17" num="5"/>
+		<country id="18" num="2" city="" capital=""/>
+		<country id="19" num="1"/>
+		<country id="42" num="2" city=""/>
+	</colour>
+	<colour> Green
+		<country id="3" num="2"/>
+		<country id="6" num="2"/>
+		<country id="12" num="4" city=""/>
+		<country id="13" num="5" capital=""/>
+		<country id="14" num="2"/>
+		<country id="23" num="3" city=""/>
+		<country id="22" num="3" city=""/>
+		<country id="27" num="1"/>
+		<country id="34" num="2" city=""/>
+		<country id="37" num="2"/>
+	</colour>
+	<colour> Blue
+		<country id="2" num="3" capital=""/>
+		<country id="4" num="3"/>
+		<country id="5" num="2" city=""/>
+		<country id="7" num="2" city=""/>
+		<country id="8" num="3" city=""/>
+		<country id="10" num="2"/>
+		<country id="20" num="2"/>
+		<country id="21" num="2"/>
+		<country id="29" num="2"/>
+		<country id="30" num="2"/>
+		<country id="31" num="2"/>
+	</colour>
+	<colour> Red
+		<country id="11" num="2"/>
+		<country id="15" num="3" city=""/>
+		<country id="28" num="5"/>
+		<country id="32" num="1"/>
+		<country id="33" num="1"/>
+		<country id="35" num="1"/>
+		<country id="36" num="2" city=""/>
+		<country id="38" num="1" city=""/>
+		<country id="39" num="4" capital=""/>
+		<country id="40" num="1"/>
+		<country id="41" num="4"/>
+	</colour>
+</option>
+<option players="5">
+	<colour> Yellow
+		<country id="2" num="2"/>
+		<country id="17" num="2"/>
+		<country id="22" num="4" capital=""/>
+		<country id="24" num="2" city=""/>
+		<country id="26" num="2" city=""/>
+		<country id="27" num="3"/>
+		<country id="33" num="3"/>
+		<country id="40" num="2"/>
+	</colour>
+	<colour> Green
+		<country id="3" num="2"/>
+		<country id="5" num="2" city=""/>
+		<country id="6" num="4" capital=""/>
+		<country id="7" num="2" city=""/>
+		<country id="8" num="2" city=""/>
+		<country id="10" num="3"/>
+		<country id="18" num="2"/>
+		<country id="35" num="3"/>
+	</colour>
+	<colour> Blue
+		<country id="1" num="1"/>
+		<country id="14" num="3"/>
+		<country id="15" num="2" city=""/>
+		<country id="16" num="3"/>
+		<country id="19" num="5" city="" capital=""/>
+		<country id="21" num="1"/>
+		<country id="25" num="3" city=""/>
+		<country id="32" num="2"/>
+	</colour>
+	<colour> Red
+		<country id="4" num="2"/>
+		<country id="9" num="1"/>
+		<country id="11" num="2"/>
+		<country id="12" num="5" city=""/>
+		<country id="13" num="3" capital=""/>
+		<country id="20" num="1"/>
+		<country id="23" num="3" city=""/>
+		<country id="28" num="1"/>
+		<country id="38" num="2" capital=""/>
+	</colour>
+	<colour> Black
+		<country id="29" num="1"/>
+		<country id="30" num="2"/>
+		<country id="31" num="1"/>
+		<country id="34" num="3" city=""/>
+		<country id="36" num="2" city=""/>
+		<country id="37" num="3"/>
+		<country id="39" num="2"/>
+		<country id="41" num="2"/>
+		<country id="42" num="4" city="" capital=""/>
+	</colour>
+</option>
+</setup>
