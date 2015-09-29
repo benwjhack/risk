@@ -36,11 +36,12 @@ public class Game {
 	
 	public Texture[] images;
 	
+	public String message = "";
 	public int[] selected = new int[]{-1, 0};
 	public Button[] buttons;
 	public Player[] players;
 	public Continent[] continents;
-	public int mousex, mousey, translate_x = 0, translate_y = 0;
+	public int mousex, mousey, translate_x = 0, translate_y = 0, mtime = 0;
 	
 	public Game(int country, int number){
 		mthis = this;
@@ -128,6 +129,7 @@ public class Game {
 									if(stage == 2){
 										Continent.advanceGo();
 										selected[0] = -1;
+										stage = 0;
 									} else {
 										stage++;
 										selected[0] = -1;
@@ -139,7 +141,7 @@ public class Game {
 					}
 					switch(stage){
 					case 0:
-						for(Country country: Continent.overall){
+						for(Country country: players[player].countries){
 							if(country.owner!=player){continue;}
 							int width = FONTS[2].getWidth(country.name+": "+country.army);
 							int height = FONTS[2].getHeight(country.name+": "+country.army);
@@ -148,7 +150,7 @@ public class Game {
 								trip = true;
 							} else if(country.pos[0] < 0.1 && Math.abs(mousex - country.rpos[0] + iWIDTH) < width / 2 && Math.abs(mousey - country.rpos[1]) < height / 2){
 								trip = true;
-							} else if(country.pos[0] > 0.9 && Math.abs(mousex - country.rpos[0] - iWIDTH) < width / 2 && Math.abs(mousey - country.rpos[1]) < height / 2){
+							} else if(country.pos[0] > 0.9 && Math.abs(mousex - (country.rpos[0] - iWIDTH)) < width / 2 && Math.abs(mousey - country.rpos[1]) < height / 2){
 								trip = true;
 							}
 							if(trip){
@@ -169,9 +171,11 @@ public class Game {
 							boolean trip = false;
 							if(Math.abs(mousex - country.rpos[0]) < width / 2 && Math.abs(mousey - country.rpos[1]) < height / 2){
 								trip = true;
-							} else if(country.pos[0] < 0.1 && Math.abs(mousex - country.rpos[0] + iWIDTH) < width / 2 && Math.abs(mousey - country.rpos[1]) < height / 2){
+							}
+							if(country.pos[0] < 0.1 && Math.abs(mousex - country.rpos[0] + iWIDTH) < width / 2 && Math.abs(mousey - country.rpos[1]) < height / 2){
 								trip = true;
-							} else if(country.pos[0] > 0.9 && Math.abs(mousex - country.rpos[0] - iWIDTH) < width / 2 && Math.abs(mousey - country.rpos[1]) < height / 2){
+							}
+							if(country.pos[0] > 0.9 && Math.abs(mousex - (country.rpos[0] - iWIDTH)) < width / 2 && Math.abs(mousey - country.rpos[1]) < height / 2){
 								trip = true;
 							}
 							if(trip){
@@ -205,7 +209,7 @@ public class Game {
 								trip = true;
 							} else if(country.pos[0] < 0.1 && Math.abs(mousex - country.rpos[0] + iWIDTH) < width / 2 && Math.abs(mousey - country.rpos[1]) < height / 2){
 								trip = true;
-							} else if(country.pos[0] > 0.9 && Math.abs(mousex - country.rpos[0] - iWIDTH) < width / 2 && Math.abs(mousey - country.rpos[1]) < height / 2){
+							} else if(country.pos[0] > 0.9 && Math.abs(mousex - (country.rpos[0] - iWIDTH)) < width / 2 && Math.abs(mousey - country.rpos[1]) < height / 2){
 								trip = true;
 							}
 							if(trip){
@@ -220,7 +224,7 @@ public class Game {
 										Continent.overall.get(selected[0]).army -= selected[1];
 										country.army += selected[1];
 										selected[0] = -1;
-										stage++;
+										stage = 0;
 										Continent.advanceGo();
 									}
 								}
@@ -349,9 +353,23 @@ public class Game {
 			break;
 		}
 		
+		if(mtime != 0){
+			int trans = 255;
+			if(mtime < 255){
+				trans = mtime;
+			}
+			FONTS[2].drawString(translate_x, translate_y + HEIGHT - FONTS[2].getHeight("I"), message, new Color(255, 255, 255, trans));
+			mtime--;
+		}
+		
 		glPopMatrix();
 		Display.update();
 		
+	}
+	
+	public void setMessage(String string){
+		message = string;
+		mtime = 500;
 	}
 	
 	// Back end logic
@@ -407,6 +425,14 @@ public class Game {
 		}
 		
 		// BUTTON
+		
+		// PLAYERS
+		
+		if(go != player){
+			players[go].update();
+		}
+		
+		// PLAYERS
 		
 	}
 	

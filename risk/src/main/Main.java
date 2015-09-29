@@ -18,6 +18,7 @@ import static org.lwjgl.opengl.GL11.glPopMatrix;
 import static org.lwjgl.opengl.GL11.glPushMatrix;
 import static org.lwjgl.opengl.GL11.glTranslatef;
 import game.Game;
+import game.Player;
 
 import java.awt.Font;
 import java.io.File;
@@ -200,6 +201,7 @@ public class Main {
 		unlocked = settings[3];
 		
 		Game.settings = new int[]{0, 2, 1};
+		Player.tactics = new int[]{0, 0, 0, 0, 0};
 		
 	}
 	

@@ -23,10 +23,14 @@ public class Continent {
 	
 	public static void advanceGo(){
 		Game.go++;
-		
+		Game.go%=Country.players;
+		if(Game.go == Game.player){
+			Game.mthis.players[Game.player].update();
+		}
 	}
 	
 	public static void attack(int country1, int country2, int troops){
+		String message = "", origOwner = Country.names[overall.get(country2).owner];
 		int stroops = troops;
 		if(troops < 2){
 			return;
@@ -62,11 +66,13 @@ public class Continent {
 				if(attackDice[i] > defendDice[i]){
 					overall.get(country1).army--;
 					troops--;
+					message += Country.names[overall.get(country1).owner] + " lost";
 				} else {
 					overall.get(country2).army--;
 					if(overall.get(country2).army == 0){
 						trip = true;
 					}
+					message += Country.names[overall.get(country1).owner] + " won";
 				}
 				i++;
 			}
@@ -79,6 +85,7 @@ public class Continent {
 				break;
 			}
 		}
+		Game.mthis.setMessage(message + " vs " + origOwner + " at " + overall.get(country1).name);
 	}
 	
 	public static int[] sort(int[] array){

@@ -57,7 +57,7 @@ public class Init extends Thread{
 		for(int i = 0; i != Country.players; i++){
 			Country.names[i] = Setup.mthis.list[i];
 		}
-		float[][] colours = new float[][]{{1f, 1f, 0f}, {0f, 1f, 0f}, {0f, 0f, 1f}, {1f, 0f, 0f}, {1f, 1f, 1f}};
+		float[][] colours = new float[][]{{1f, 1f, 0f}, {0f, 1f, 0f}, {0f, 0f, 1f}, {1f, 0f, 0f}, {0f, 0f, 0f}};
 		Country.colours = new float[Country.players][];
 		for(int i = 0; i != Country.players; i++){
 			Country.colours[i] = colours[i];
@@ -120,7 +120,7 @@ public class Init extends Thread{
 			for(int i2 = 0; i2 != node.getChildNodes().getLength(); i2++){
 				Node cnode = node.getChildNodes().item(i2);
 				String[] pos = cnode.getAttributes().getNamedItem("pos").getTextContent().split(" ");
-				Country country = new Country(cnode.getAttributes().getNamedItem("name").getTextContent(), Float.parseFloat(pos[0]), Float.parseFloat(pos[1]));
+				Country country = new Country(cnode.getAttributes().getNamedItem("name").getTextContent(), Float.parseFloat(pos[0]), Float.parseFloat(pos[1]), i);
 				countries[i2] = country;
 			}
 			Continent continent = new Continent(node.getAttributes().getNamedItem("name").getTextContent(), Integer.parseInt(node.getAttributes().getNamedItem("bonus").getTextContent()), countries);
@@ -188,14 +188,26 @@ public class Init extends Thread{
 		Draw.drawSquare(Game.mthis.translate_x, Game.mthis.translate_y, Game.WIDTH, 100);
 		
 		int height = 0;
+		int width = 0;
 		String string = "Go : "+Country.names[Game.go];
 		Game.FONTS[2].drawString(Game.mthis.translate_x, Game.mthis.translate_y + height, string);
 		height += Game.FONTS[2].getHeight(string);
+		width += Game.FONTS[2].getWidth(string);
 		string = "Attack dice : "+Game.settings[1];
 		Game.FONTS[2].drawString(Game.mthis.translate_x, Game.mthis.translate_y + height, string);
 		height += Game.FONTS[2].getHeight(string);
+		if(Game.FONTS[2].getWidth(string) > width){
+			width = Game.FONTS[2].getWidth(string);
+		}
 		string = "Defend dice : "+Game.settings[2];
 		Game.FONTS[2].drawString(Game.mthis.translate_x, Game.mthis.translate_y + height, string);
+		if(Game.FONTS[2].getWidth(string) > width){
+			width = Game.FONTS[2].getWidth(string);
+		}
+		
+		width += Game.FONTS[2].getWidth("    ");
+		string = "Stage : "+Game.stage;
+		Game.FONTS[2].drawString(Game.mthis.translate_x + width, Game.mthis.translate_y, string);
 		
 	}
 	
