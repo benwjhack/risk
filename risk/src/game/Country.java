@@ -20,11 +20,29 @@ public class Country {
 		this.continent = continent;
 	}
 	
+	public Country(Country country){
+		this.name = country.name;
+		this.pos = country.pos.clone();
+		this.rpos = country.rpos.clone();
+		this.id = country.id;
+		this.continent = country.continent;
+		this.city = country.city;
+		this.capital = country.capital;
+		this.nextTo = country.nextTo;
+		this.army = country.army;
+		this.owner = country.owner;
+		this.origOwner = country.origOwner;
+	}
+	
 	public void position(){
 		if(!done){
 			System.out.println(name + " not done!");
 		}
 		this.rpos = new int[]{(int) (pos[0]*Game.iWIDTH), (int) (pos[1]*Game.iHEIGHT)};
+	}
+	
+	public Country clone(){
+		return new Country(this);
 	}
 	
 }

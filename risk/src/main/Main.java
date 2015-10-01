@@ -388,4 +388,14 @@ public class Main {
 		new Main().run();
 	}
 	
+	private static void yesyoucan() {    
+	    try {
+	        System.out.println("Yes, you can!");
+	        yesyoucan();
+	      } catch (Error e) {
+		        System.out.println("No, you can't!");
+	        yesyoucan();
+	      }    
+	    }
+	
 }
