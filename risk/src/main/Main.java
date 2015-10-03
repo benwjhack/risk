@@ -201,7 +201,7 @@ public class Main {
 		unlocked = settings[3];
 		
 		Game.settings = new int[]{0, 2, 1};
-		Player.tactics = new int[]{0, 0, 0, 0, 0};
+		Player.tactics = new int[]{0, 1, 0, 0, 0};
 		
 	}
 	
@@ -300,7 +300,7 @@ public class Main {
 							switch(i){
 							case 0:
 								float at = sounds[0].getPosition();
-								sounds[0].stop();
+								//sounds[0].stop();
 								new Setup().run(false);
 								if(SOUND){
 									sounds[0].playAsMusic(1.0f, 1.0f, true);

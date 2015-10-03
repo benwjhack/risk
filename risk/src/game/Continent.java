@@ -39,6 +39,9 @@ public class Continent {
 		Game.go%=Country.players;
 		if(Game.go==Game.player){
 			Game.mthis.players[Game.player].update();
+			if(Game.mthis.players[Game.player].countries.size() < 1){
+				advanceGo();
+			}
 		}
 	}
 	
@@ -151,7 +154,10 @@ public class Continent {
 				overall.get(country2).army = troops;
 				players[overall.get(country2).owner].countries.remove(overall.get(country2));
 				overall.get(country2).owner = overall.get(country1).owner;
-				System.out.println("Setting owner of "+overall.get(country2).name+" to "+overall.get(country2).owner);
+				//if(country2 == 1 || country2 == 0){
+					//System.out.println("Setting owner of "+overall.get(country2).name+" to "+overall.get(country2).owner);
+					
+				//}
 				players[overall.get(country1).owner].countries.add(overall.get(country2));
 				overall.get(country1).army -= troops;
 				break;
