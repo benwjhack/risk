@@ -176,7 +176,7 @@ public class Init extends Thread{
 	    int sb = 2;
 	    Game.mthis.buttons = new Button[sb];
 		Game.mthis.buttons[0] = new Button(Setup.WIDTH-Game.FONTS[2].getWidth("Menu"), 0, "Menu", 1, true);
-		Game.mthis.buttons[1] = new Button(Setup.WIDTH-Game.FONTS[2].getWidth("End Go"), (int)(Game.FONTS[2].getHeight("I")*2), "End Go", 1, true);
+		Game.mthis.buttons[1] = new Button(Setup.WIDTH-Game.FONTS[2].getWidth("Advance stage"), (int)(Game.FONTS[2].getHeight("I")*2), "Advance stage", 1, true);
 	    
 		Setup.STATE = 3;
 		Setup.drawText = "Done!";
@@ -206,7 +206,8 @@ public class Init extends Thread{
 		}
 		
 		width += Game.FONTS[2].getWidth("    ");
-		string = "Stage : "+Game.stage;
+		String[] adds = new String[]{"Draft", "Attack", "Manoveur"};
+		string = "Stage : "+adds[Game.stage];
 		Game.FONTS[2].drawString(Game.mthis.translate_x + width, Game.mthis.translate_y, string);
 		
 	}

@@ -8,6 +8,7 @@ import static org.lwjgl.opengl.GL11.glPushMatrix;
 import static org.lwjgl.opengl.GL11.glTranslatef;
 import game.Game;
 import game.Init;
+import game.Player;
 
 import java.awt.Font;
 import java.io.File;
@@ -244,6 +245,14 @@ public class Setup {
 						}
 					}
 					break;
+				case 1:
+					for(int i = 0; i != text.length; i++){
+						if(mousex >= text[i][0] && mousex <= text[i][0] + Main.FONT.getWidth(texts[i]) && mousey >= text[i][1] && mousey <= text[i][1] + Main.FONT.getHeight(texts[i])){
+							Player.tactics[i]++;
+							Player.tactics[i]%=3;
+						}
+					}
+					break;
 				default:
 					//System.out.println(eventKey);
 					break;
@@ -295,7 +304,7 @@ public class Setup {
 		
 		for(int i = 0; i != text.length; i++){
 			if(colours[i]){
-				FONT2.drawString(text[i][0], text[i][1], texts[i]);
+				FONT2.drawString(text[i][0], text[i][1], texts[i]+" (tactic "+Player.tactics[i]+")");
 				continue;
 			}
 			FONT.drawString(text[i][0], text[i][1], texts[i]);

@@ -184,6 +184,25 @@ public class Continent {
 		return answer;
 	}
 	
+	public static float[] sort(float[] array){
+		float[] answer = new float[array.length];
+		int[] used = new int[array.length];
+		int count = 0;
+		for(int i = 0; i != array.length; i++){used[i] = -1;}
+		while(count != array.length){
+			int biggest = -1;
+			for(int i = 0; i != array.length; i++){
+				if(used[i]==-1 && (biggest == -1 || array[i] > array[biggest])){
+					biggest = i;
+				}
+			}
+			used[biggest] = 1;
+			answer[count] = array[biggest];
+			count++;
+		}
+		return answer;
+	}
+	
 	public static boolean joined(Country country1, Country country2){
 		ArrayBlockingQueue<Country> queue = new ArrayBlockingQueue<Country>(1024);
 		ArrayList<Country> countries = new ArrayList<Country>();

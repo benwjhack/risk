@@ -81,12 +81,15 @@ public class Player {
 	}
 	
 	public void tactic0(){
-		int[] continents = new int[6];
+		float[] continents = new float[6];
 		int chosen = -1;
 		for(Country country: countries){
 			continents[country.continent]++;
 		}
-		int[] continents2 = Continent.sort(continents);
+		for(int i = 0; i != continents.length; i++){
+			continents[i] /= Game.mthis.continents[i].countries.length;
+		}
+		float[] continents2 = Continent.sort(continents);
 		int current = 0;
 		while(true){
 			for(int i = 0; i != 6; i++){
@@ -95,7 +98,7 @@ public class Player {
 					break;
 				}
 			}
-			if(continents2[current]==Game.mthis.continents[chosen].countries.length){
+			if(continents2[current]==1.0f){
 				current++;
 				if(current==Game.mthis.continents.length){
 					Game.mthis.setMessage(Country.names[id]+" won!");
@@ -107,6 +110,7 @@ public class Player {
 			}
 		}
 		System.out.println(name+" wants "+Game.mthis.continents[chosen].name);
+		// Seeing if there's an enemy next to each country
 		int[] country2i = new int[Continent.overall.size()];
 		for(int i = 0; i != Continent.overall.size(); i++){
 			int count = 0;
@@ -126,7 +130,7 @@ public class Player {
 			ArrayList<Country> countries2 = (ArrayList<Country>) countries.clone();
 			for(Country country: countries2){
 				if(draft != 0 && country.continent == chosen && country2i[country.id] != 0){
-					System.out.println("Adding "+draft+" to "+country.name);
+					//System.out.println("Adding "+draft+" to "+country.name);
 					country.army += draft;
 					draft = 0;
 				} 
@@ -135,7 +139,7 @@ public class Player {
 						if(Continent.overall.get(i).owner != id){
 							trip = false;
 							Continent.attack(country.id, i, country.army-1);
-							System.out.println("Attacking "+Continent.overall.get(i).name+" with "+country.name+" with "+(country.army-1));
+							//System.out.println("Attacking "+Continent.overall.get(i).name+" with "+country.name+" with "+(country.army-1));
 						}
 					}
 				}
@@ -148,14 +152,33 @@ public class Player {
 			for(Country country: Game.mthis.continents[chosen].countries){
 				if(country.owner == id){
 					country.army += draft;
+					draft = 0;
 					break;
 				}
+			}
+		}
+		if(draft != 0){
+			int trip = -1, trip2 = -1;
+			for(Country country: Game.mthis.continents[chosen].countries){
+				for(int i: country.nextTo){
+					if(Continent.overall.get(i).owner == id && Continent.overall.get(i).continent != chosen){
+						trip = i;
+						trip2 = country.id;
+					}
+				}
+			}
+			if(trip != -1){
+				Continent.overall.get(trip).army+=draft;
+				Continent.attack(trip, trip2, Continent.overall.get(trip).army-1);
+			} else if(countries.size()!=0){
+				countries.get(0).army+=draft;
 			}
 		}
 	}
 	
 	public void tactic1(){
 		int max = 10;
+		@SuppressWarnings("unchecked")
 		ArrayList<Integer[]>[] goes = new ArrayList[max];
 		int[][] drafts = new int[max][];
 		boolean[] good = new boolean[max];
@@ -165,7 +188,6 @@ public class Player {
 			for(Country country: Continent.overall){
 				countries.add(country.clone());
 			}
-			//Continent[] continents = Game.mthis.continents.clone();
 			Player[] players = new Player[Game.mthis.players.length];
 			for(int i = 0; i != Game.mthis.players.length; i++){
 				players[i] = Game.mthis.players[i].clone(countries);
@@ -177,6 +199,7 @@ public class Player {
 				draft[i] = next;
 				countries.get(this.countries.get(next).id).army++;
 			}
+			drafts[count] = draft;
 			int averageGoes = 20;
 			while(true){
 				if(Game.random.nextInt(averageGoes) == 0){
@@ -191,23 +214,17 @@ public class Player {
 				Continent.attack2(players[go].countries.get(next).id, players[go].countries.get(next).nextTo[next2], troops, countries, players);
 				goe.add(new Integer[]{next, next2, troops});
 			}
+			goes[count] = goe;
 			go++;
-			int fail = -1;
 			while(true){
 				go%=Country.players;
 				boolean trip = true;
 				int trip2 = countries.get(0).owner;
 				for(Country country: countries){
 					if(country.owner != trip2){
-						//System.out.println("Failed on "+country.id+" with owner "+country.owner);
 						trip = false;
-						if(fail != country.id){
-							//System.out.println("New fail at "+country.name+" with "+country.owner);
-							fail = country.id;
-						}
 						break;
 					}
-					//System.out.println("Not failed on "+country.id+" with owner "+country.owner);
 				}
 				if(trip){
 					goes[count] = goe;
@@ -215,43 +232,25 @@ public class Player {
 					good[count] = countries.get(0).owner==id;
 					break;
 				}
-				/*players[go].update2();
-				for(int i = 0; i != players[go].draft; i++){
-					int next = Game.random.nextInt(players[go].countries.size());
-					countries.get(players[go].countries.get(next).id).army++;
-				}
-				//System.out.println("Sim go "+go);
-				while(true){
-					if(Game.random.nextInt(averageGoes) == 0){
-						break;
-					}
-					if(players[go].countries.size() < 1){
-						System.out.println(go+" has died w/ "+players[go].countries.size());
-						break;
-					}
-					int next = Game.random.nextInt(players[go].countries.size());
-					if(next == 2 || next == 0 || next == 5 || next == 6){
-						//System.out.println("Next : "+next);
-					}
-					int next2 = Game.random.nextInt(players[go].countries.get(next).nextTo.length);
-					if(players[go].countries.get(next).nextTo[next2] == 1){
-						//System.out.println("Attacking 2");
-					}
-					if(players[go].countries.get(next).army < 2 || countries.get(players[go].countries.get(next).nextTo[next2]).owner == players[go].countries.get(next).owner){
-						continue;
-					}
-					int troops = Game.random.nextInt(players[go].countries.get(next).army-1)+1;
-					Continent.attack2(players[go].countries.get(next).id, players[go].countries.get(next).nextTo[next2], troops, countries, players);
-				}*/
 				players[go].tactic2(countries, players);
 				go++;
-				//break;
 			}
-			//System.out.println("Next is "+count);
 		}
 		for(int i = 0; i != max; i++){
 			if(!good[i]){continue;}
 			System.out.println("i "+i+" is a good one");
+			for(int next: drafts[i]){
+				this.countries.get(next).army++;
+			}
+			for(Integer[] go: goes[i]){
+				if(go[0] > countries.size()-1){
+					continue;
+				}
+				int next = countries.get(go[0]).id;
+				int next2 = countries.get(go[0]).nextTo[go[1]];
+				Continent.attack(next, next2, go[2]);
+			}
+			break;
 		}
 		System.out.println("END SIM");
 	}
@@ -275,23 +274,16 @@ public class Player {
 			}
 			overall.get(this.countries.get(next).id).army++;
 		}
-		//System.out.println("Sim go "+go);
 		while(true){
 			if(Game.random.nextInt(averageGoes) == 0){
 				break;
 			}
 			if(this.countries.size() < 1){
-				//System.out.println(id+" has died w/ "+this.countries.size());
 				break;
 			}
 			int next = Game.random.nextInt(this.countries.size());
-			if(next == 2 || next == 0 || next == 5 || next == 6){
-				//System.out.println("Next : "+next);
-			}
 			int next2 = Game.random.nextInt(this.countries.get(next).nextTo.length);
-			if(this.countries.get(next).nextTo[next2] == 1){
-				//System.out.println("Attacking 2");
-			}
+			
 			if(this.countries.get(next).army < 2 || overall.get(this.countries.get(next).nextTo[next2]).owner == this.countries.get(next).owner){
 				continue;
 			}

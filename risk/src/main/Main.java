@@ -201,7 +201,7 @@ public class Main {
 		unlocked = settings[3];
 		
 		Game.settings = new int[]{0, 2, 1};
-		Player.tactics = new int[]{0, 1, 0, 0, 0};
+		Player.tactics = new int[]{0, 0, 0, 0, 0};
 		
 	}
 	
