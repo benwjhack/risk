@@ -71,7 +71,7 @@ public class IOHandle {
 		}
     	Scanner scan = new Scanner(settings);
     	int sn = 5;
-    	int[] answers = new int[sn];
+    	int[] answers = new int[sn+3];
     	
     	for(int i = 0; i != sn; i++){
     		try{

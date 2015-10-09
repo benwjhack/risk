@@ -146,7 +146,7 @@ public class Main {
 			Display.setResizable(true);
 			Display.setLocation(0, 0);
 			Display.setFullscreen(settings[2] == 0);
-			Display.setTitle("???");
+			Display.setTitle("Risk");
 	        try {
 				Display.setIcon(new ByteBuffer[] {
 				         new ImageIOImageData().imageToByteBuffer(ImageIO.read(new File("res/black2.png")), false, false, null),
@@ -200,7 +200,7 @@ public class Main {
 		
 		unlocked = settings[3];
 		
-		Game.settings = new int[]{0, 2, 1};
+		Game.settings = new int[]{0, 2, 1, settings[5], settings[6], settings[7]};
 		Player.tactics = new int[]{0, 0, 0, 0, 0};
 		
 	}

@@ -37,10 +37,19 @@ public class Continent {
 	public static void advanceGo(){
 		Game.go++;
 		Game.go%=Country.players;
-		if(Game.go==Game.player){
+		if(Game.go==Game.player&&Game.settings[3]!=1){
 			Game.mthis.players[Game.player].update();
 			if(Game.mthis.players[Game.player].countries.size() < 1){
 				advanceGo();
+			}
+		}
+		if(Game.settings[4]!=0){
+			if(((Game.go+1)%Country.players!=Game.player&&Game.go!=Game.player)||Game.settings[3]==1){
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
 			}
 		}
 	}

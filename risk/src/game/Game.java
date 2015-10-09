@@ -60,8 +60,13 @@ public class Game {
 		RWIDTH = Main.RWIDTH;
 		RHEIGHT = Main.RHEIGHT;
 		
-		iWIDTH = WIDTH * 2;
-		iHEIGHT = HEIGHT * 2;
+		if(settings[3]==0){
+			iWIDTH = WIDTH * 2;
+			iHEIGHT = HEIGHT * 2;
+		}else{
+			iWIDTH = WIDTH;
+			iHEIGHT = HEIGHT;
+		}
 		
 		for(Country country: Continent.overall){
 			country.position();
@@ -213,7 +218,7 @@ public class Game {
 								trip = true;
 							}
 							if(trip){
-								if(selected[0] == country.id){
+								if(selected[0] == country.id && country.army-1 != 0){
 									selected[1] %= (country.army-1);
 									selected[1]++;
 								} else {
@@ -428,8 +433,9 @@ public class Game {
 		
 		// PLAYERS
 		
-		if(go != player){
+		if(go != player || settings[3]==1){
 			players[go].update();
+			System.out.println("Updating player "+go);
 		}
 		
 		// PLAYERS

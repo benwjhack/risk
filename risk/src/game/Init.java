@@ -52,15 +52,17 @@ public class Init extends Thread{
 	@SuppressWarnings("unchecked")
 	public static void init2(){
 		
-		Country.players = Setup.players;
-		Country.names = new String[Country.players];
-		for(int i = 0; i != Country.players; i++){
-			Country.names[i] = Setup.mthis.list[i];
-		}
-		float[][] colours = new float[][]{{1f, 1f, 0f}, {0f, 1f, 0f}, {0f, 0f, 1f}, {1f, 0f, 0f}, {0f, 0f, 0f}};
-		Country.colours = new float[Country.players][];
-		for(int i = 0; i != Country.players; i++){
-			Country.colours[i] = colours[i];
+		if(Setup.players!=-1){
+			Country.players = Setup.players;
+			Country.names = new String[Country.players];
+			for(int i = 0; i != Country.players; i++){
+				Country.names[i] = Setup.mthis.list[i];
+			}
+			float[][] colours = new float[][]{{1f, 1f, 0f}, {0f, 1f, 0f}, {0f, 0f, 1f}, {1f, 0f, 0f}, {0f, 0f, 0f}};
+			Country.colours = new float[Country.players][];
+			for(int i = 0; i != Country.players; i++){
+				Country.colours[i] = colours[i];
+			}
 		}
 		
 		Texture[] images = new Texture[3];
@@ -105,11 +107,13 @@ public class Init extends Thread{
 	    }
 	    Game.FONTS[3] = FONT;
 	    
-	    Game.mthis.players = new Player[Country.players];
-	    for(int i = 0; i != Country.players; i++){
-	    	Game.mthis.players[i] = new Player(i);
+	    if(Setup.players!=-1){
+	    	Game.mthis.players = new Player[Country.players];
+		    for(int i = 0; i != Country.players; i++){
+		    	Game.mthis.players[i] = new Player(i);
+		    }
+		    Game.mthis.players[Game.player].player = true;
 	    }
-	    Game.mthis.players[Game.player].player = true;
 	    
 	    Continent[] continents = new Continent[6];
 	    Document doc = IOHandle.readXML("info/continents/continents.xml");
@@ -151,25 +155,78 @@ public class Init extends Thread{
 	    	}
 	    }
 	    
-	    doc = IOHandle.readXML("info/continents/setup.xml");
-		nodes = doc.getDocumentElement().getChildNodes().item(Setup.players-3).getChildNodes();
-	    for(int i = 0; i != nodes.getLength(); i++){
-	    	NodeList nodes2 = nodes.item(i).getChildNodes();
-	    	for(int i2 = 0; i2 != nodes2.getLength(); i2++){
-	    		Node node = nodes2.item(i2);
-	    		int id = Integer.parseInt(node.getAttributes().getNamedItem("id").getTextContent())-1;
-	    		int num = Integer.parseInt(node.getAttributes().getNamedItem("num").getTextContent());
-	    		boolean city = node.getAttributes().getNamedItem("city")!=null;
-	    		boolean capital = node.getAttributes().getNamedItem("capital")!=null;
-	    		Continent.overall.get(id).army = num;
-	    		Continent.overall.get(id).city = city;
-	    		Continent.overall.get(id).owner = i;
-	    		Continent.overall.get(id).origOwner = i;
-	    		Continent.overall.get(id).capital = capital;
-	    		Continent.overall.get(id).done = true;
-	    		Game.mthis.players[i].countries.add(Continent.overall.get(id));
-	    	}
-		}
+	    if(Setup.players!=-1){
+	    	doc = IOHandle.readXML("info/continents/setup.xml");
+			nodes = doc.getDocumentElement().getChildNodes().item(Setup.players-3).getChildNodes();
+		    for(int i = 0; i != nodes.getLength(); i++){
+		    	NodeList nodes2 = nodes.item(i).getChildNodes();
+		    	for(int i2 = 0; i2 != nodes2.getLength(); i2++){
+		    		Node node = nodes2.item(i2);
+		    		int id = Integer.parseInt(node.getAttributes().getNamedItem("id").getTextContent())-1;
+		    		int num = Integer.parseInt(node.getAttributes().getNamedItem("num").getTextContent());
+		    		boolean city = node.getAttributes().getNamedItem("city")!=null;
+		    		boolean capital = node.getAttributes().getNamedItem("capital")!=null;
+		    		Continent.overall.get(id).army = num;
+		    		Continent.overall.get(id).city = city;
+		    		Continent.overall.get(id).owner = i;
+		    		Continent.overall.get(id).origOwner = i;
+		    		Continent.overall.get(id).capital = capital;
+		    		Continent.overall.get(id).done = true;
+		    		Game.mthis.players[i].countries.add(Continent.overall.get(id));
+		    	}
+			}
+	    } else {
+	    	Country.players = Continent.overall.size();
+			Country.names = new String[Country.players];
+			for(int i = 0; i != Country.players; i++){
+				Country.names[i] = ""+i;
+			}
+			Country.colours = new float[Country.players][];
+			int over = (255/Country.players)*3;
+			for(int i = 0; i != Country.players; i++){
+				float[] colour;
+				if(i%3==0){
+					if((i*over)/255==0){
+						colour = new float[]{i*over, 0f, 0f};
+					}else if((i*over)/255==1){
+						colour = new float[]{255f, i*over-255, 0f};
+					}else{
+						colour = new float[]{255f, 255f, i*over-255*2};
+					}
+				}else if(i%3==1){
+					if((i*over)/255==0){
+						colour = new float[]{0f, i*over, 0f};
+					}else if((i*over)/255==1){
+						colour = new float[]{0f, 255f, i*over-255};
+					}else{
+						colour = new float[]{i*over-255*2, 255f, 255f};
+					}
+				}else{
+					if((i*over)/255==0){
+						colour = new float[]{0f, 0f, i*over};
+					}else if((i*over)/255==1){
+						colour = new float[]{i*over-255, 0f, 255f};
+					}else{
+						colour = new float[]{255f, i*over-255*2, 255f};
+					}
+				}
+				Country.colours[i] = colour;
+			}
+	    	Game.mthis.players = new Player[Country.players];
+		    for(int i = 0; i != Country.players; i++){
+		    	Game.mthis.players[i] = new Player(i);
+		    }
+		    Game.mthis.players[Game.player].player = true;
+		    for(Country country: Continent.overall){
+		    	country.army = 1;
+	    		country.city = Game.random.nextBoolean();
+	    		country.owner = country.id;
+	    		country.origOwner = country.id;
+	    		country.capital = false;
+	    		country.done = true;
+	    		Game.mthis.players[country.id].countries.add(country);
+		    }
+	    }
 	    
 	    Game.mthis.continents = continents;
 	    

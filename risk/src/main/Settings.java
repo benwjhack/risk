@@ -152,7 +152,7 @@ public class Settings {
 			e1.printStackTrace();
 		}
         
-        setupStrings(new String[]{"Full Screen : " + Boolean.toString(FULL), "Music : " + Main.SOUND});
+        setupStrings(new String[]{"Full Screen : " + Boolean.toString(FULL), "Music : " + Main.SOUND, "Autoplay : "+(Game.settings[3]==1), "Wait between turns :"+Game.settings[4], "Single states : "+(Game.settings[5]==1)});
         
         ball[0] = WIDTH / 2;
         ball[1] = HEIGHT / 2;
@@ -290,7 +290,7 @@ public class Settings {
 								} catch (LWJGLException e) {
 									e.printStackTrace();
 								}
-								setupStrings(new String[]{"Full Screen : " + FULL, texts[1]});
+								setupStrings(new String[]{"Full Screen : " + FULL, texts[1], texts[2], texts[3], texts[4]});
 								RWIDTH = Display.getWidth();
 					            RHEIGHT = Display.getHeight();
 
@@ -306,7 +306,19 @@ public class Settings {
 									Main.mthis.sounds[0].stop();
 									//Game.mthis.sounds[0].stop();
 								}
-								setupStrings(new String[]{texts[0], "Sound : " + Main.SOUND});
+								setupStrings(new String[]{texts[0], "Sound : " + Main.SOUND, texts[2], texts[3], texts[4]});
+								break;
+							case 2:
+								Game.settings[3] = Game.settings[3]==1?0:1;
+								setupStrings(new String[]{texts[0], texts[1], "Autoplay : "+(Game.settings[3]==1), texts[3], texts[4]});
+								break;
+							case 3:
+								Game.settings[4]++;
+								setupStrings(new String[]{texts[0], texts[1], texts[2], "Wait between turns : "+Game.settings[4], texts[4]});
+								break;
+							case 4:
+								Game.settings[5] = Game.settings[5]==1?0:1;
+								setupStrings(new String[]{texts[0], texts[1], texts[2], texts[3], "Single states : "+(Game.settings[5]==1)});
 								break;
 							}
 						}
@@ -318,6 +330,21 @@ public class Settings {
 								run = false;
 								break;
 							case 1:
+								break;
+							}
+						}
+					}
+					break;
+				case 1:
+					for(int i = 0; i != text.length; i++){
+						if(mousex >= text[i][0] && mousex <= text[i][0] + Main.FONT.getWidth(texts[i]) && mousey >= text[i][1] && mousey <= text[i][1] + Main.FONT.getHeight(texts[i])){
+							switch(i){
+							case 3:
+								if(Game.settings[4] == 0){
+									break;
+								}
+								Game.settings[4]--;
+								setupStrings(new String[]{texts[0], texts[1], texts[2], "Wait between turns : "+Game.settings[4], texts[4]});
 								break;
 							}
 						}

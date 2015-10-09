@@ -144,6 +144,14 @@ public class Setup {
 		
 		init(initi);
 		
+		if(Game.settings[5]==1){
+			players = -1;
+			game = new Game(chosen, 0);
+			STATE = 1;
+			drawText = "Generating level...";
+			(new Init()).start();
+		}
+		
 		while (run) {
 			
 			glClear(GL_COLOR_BUFFER_BIT);

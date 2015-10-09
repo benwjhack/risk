@@ -15,7 +15,11 @@ public class Player {
 		this.id = id;
 		strategy = id;
 		name = Country.names[id];
-		strategy = tactics[id];
+		if(Game.settings[5]==0){
+			strategy = tactics[id];
+		}else{
+			strategy = 0;
+		}
 	}
 	
 	public Player(Player player, ArrayList<Country> countries2){
@@ -25,7 +29,6 @@ public class Player {
 		this.strategy = player.strategy;
 		this.countries = new ArrayList<Country>();
 		for(int i = 0; i != player.countries.size(); i++){
-			//countries.add(player.countries.get(i).clone());
 			countries.add(countries2.get(player.countries.get(i).id));
 		}
 	}
@@ -35,6 +38,10 @@ public class Player {
 	}
 	
 	public void update(){
+		if(countries.size() == 0){
+			Continent.advanceGo();
+			return;
+		}
 		draft = 0;
 		for(Country country: countries){
 			draft++;
@@ -62,7 +69,7 @@ public class Player {
 			draft = 3;
 		}
 		System.out.println(Country.names[id] + " has "+draft+" draft");
-		if(player){return;}
+		if(player&&Game.settings[3]!=1){return;}
 		switch(strategy){
 		case 0:
 			tactic0();
