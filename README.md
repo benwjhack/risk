@@ -1,2 +1,4 @@
 # risk
-oh god what is this
+A small Risk simulator in Java
+
+Made when at school
